@@ -357,6 +357,34 @@
     transition: all 0.15s;
   }
   .reload-btn:hover { border-color: var(--accent3); color: var(--accent3); }
+  /* ── KEYPOINTS PANEL ───────────────────────────────────────────────────── */
+  .keypoints-block {
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+  }
+  .keypoints-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px 4px;
+  }
+  .keypoints-header .s-label { color: var(--accent); flex: 1; }
+  .keypoints-box {
+    margin: 0 16px 8px;
+    padding: 8px 10px;
+    background: var(--surface2);
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border));
+    border-radius: 7px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--accent);
+    max-height: 110px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
   .separator-preview {
     font-family: var(--font-mono);
     font-size: 9px;
@@ -796,6 +824,13 @@
           <option value="__manual__">— manual —</option>
         </select>
       </div>
+      <!-- Keypoints panel -->
+      <div class="keypoints-block" id="keypoints-block" style="display:none">
+        <div class="keypoints-header">
+          <span class="s-label">Key Points</span>
+        </div>
+        <div class="keypoints-box" id="keypoints-box"></div>
+      </div>
       <!-- Separator hint -->
       <div class="separator-preview">⬆ fixed &nbsp;┄┄ separator: "---" ┄┄&nbsp; dynamic ⬇</div>
       <textarea class="prompt-ta" id="dynamic-prompt"
@@ -889,6 +924,7 @@
   let conversation  = [];
   let beats         = {};
   let startMessages = {};
+  let keypoints     = {};
   let activeCharTab = 'peter';
   let eventLog      = [];
 
@@ -983,6 +1019,12 @@
     document.getElementById('start-message').value = sm;
     document.getElementById('start-msg-count').textContent = sm.length;
     updateBeatChip(sel === '__manual__' ? null : sel);
+    // Show keypoints panel
+    const kp = sel === '__manual__' ? '' : (keypoints[sel] || '');
+    const kpBlock = document.getElementById('keypoints-block');
+    const kpBox   = document.getElementById('keypoints-box');
+    if (kp) { kpBox.textContent = kp; kpBlock.style.display = ''; }
+    else { kpBlock.style.display = 'none'; }
     updatePreview();
     if (sm) sendStartMessage();
   }
@@ -1052,6 +1094,7 @@
     const parts = text.split(/\n?(?=^@@)/m);
     beats = {};
     startMessages = {};
+    keypoints = {};
     const names = [];
     let fixedLoaded = false;
 
@@ -1064,6 +1107,10 @@
       let   body = trimmed.slice(firstNewline + 1).trim();
       if (!tag || tag.toUpperCase() === 'END') continue;
 
+      // Extract %%keypoints...%% (for display only, not sent to AI)
+      const kpMatch = body.match(/%%keypoints\s*([\s\S]*?)%%/i);
+      const kpText  = kpMatch ? kpMatch[1].trim() : '';
+      body = body.replace(/%%keypoints\s*[\s\S]*?%%/i, '').trim();
       const startMsgMatch = body.match(/\$\$START_MESSAGE([\s\S]*?)\$\$/);
       const startMsg = startMsgMatch ? startMsgMatch[1].trim() : '';
       body = body.replace(/\$\$START_MESSAGE[\s\S]*?\$\$/, '').trim();
@@ -1075,6 +1122,7 @@
       } else {
         beats[tag] = body;
         startMessages[tag] = startMsg;
+        keypoints[tag] = kpText;
         names.push(tag);
       }
     }
