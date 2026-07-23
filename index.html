@@ -358,32 +358,37 @@
   }
   .reload-btn:hover { border-color: var(--accent3); color: var(--accent3); }
   /* ── KEYPOINTS PANEL ───────────────────────────────────────────────────── */
-  .keypoints-block {
+  .keypoints-panel {
     flex-shrink: 0;
-    border-bottom: 1px solid var(--border);
-    background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+    padding: 8px 20px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   }
-  .keypoints-header {
+  .keypoints-panel-header {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 6px 16px 4px;
   }
-  .keypoints-header .s-label { color: var(--accent); flex: 1; }
+  .keypoints-panel-header .s-label { color: var(--accent); flex: 1; letter-spacing: 2px; }
+  .kp-close {
+    background: none; border: none; color: var(--text-muted);
+    cursor: pointer; font-size: 13px; padding: 0 2px; line-height: 1;
+    transition: color 0.15s;
+  }
+  .kp-close:hover { color: var(--accent); }
   .keypoints-box {
-    margin: 0 16px 8px;
-    padding: 8px 10px;
-    background: var(--surface2);
-    border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border));
-    border-radius: 7px;
     font-family: var(--font-mono);
     font-size: 11px;
-    line-height: 1.6;
+    line-height: 1.7;
     color: var(--accent);
-    max-height: 110px;
+    max-height: 120px;
     overflow-y: auto;
     white-space: pre-wrap;
     word-break: break-word;
+    opacity: 0.9;
   }
   .separator-preview {
     font-family: var(--font-mono);
@@ -824,13 +829,6 @@
           <option value="__manual__">— manual —</option>
         </select>
       </div>
-      <!-- Keypoints panel -->
-      <div class="keypoints-block" id="keypoints-block" style="display:none">
-        <div class="keypoints-header">
-          <span class="s-label">Key Points</span>
-        </div>
-        <div class="keypoints-box" id="keypoints-box"></div>
-      </div>
       <!-- Separator hint -->
       <div class="separator-preview">⬆ fixed &nbsp;┄┄ separator: "---" ┄┄&nbsp; dynamic ⬇</div>
       <textarea class="prompt-ta" id="dynamic-prompt"
@@ -892,6 +890,14 @@
 <div class="v-resizer" id="v-resizer"></div>
 <!-- ── MAIN ────────────────────────────────────────────────────────────────── -->
 <main>
+  <!-- Keypoints panel — shown above chat when beat has %%keypoints%% -->
+  <div class="keypoints-panel" id="keypoints-panel" style="display:none">
+    <div class="keypoints-panel-header">
+      <span class="s-label">Key Points</span>
+      <button class="kp-close" onclick="document.getElementById('keypoints-panel').style.display='none'" title="Hide">✕</button>
+    </div>
+    <div class="keypoints-box" id="keypoints-box"></div>
+  </div>
   <div id="messages">
     <div class="empty-state" id="empty-state">
       <div class="big-icon">⬡</div>
@@ -1021,10 +1027,10 @@
     updateBeatChip(sel === '__manual__' ? null : sel);
     // Show keypoints panel
     const kp = sel === '__manual__' ? '' : (keypoints[sel] || '');
-    const kpBlock = document.getElementById('keypoints-block');
+    const kpPanel = document.getElementById('keypoints-panel');
     const kpBox   = document.getElementById('keypoints-box');
-    if (kp) { kpBox.textContent = kp; kpBlock.style.display = ''; }
-    else { kpBlock.style.display = 'none'; }
+    if (kp) { kpBox.textContent = kp; kpPanel.style.display = ''; }
+    else { kpPanel.style.display = 'none'; }
     updatePreview();
     if (sm) sendStartMessage();
   }
