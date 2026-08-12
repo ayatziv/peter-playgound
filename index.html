@@ -807,142 +807,11 @@
         <span class="char-count" id="dynamic-chars">0</span>
       </div>
 
-      <!-- â”€â”€ GOOGLE DOC LOADER (primary) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
-      <div class="doc-loader">
-        <div class="doc-loader-label">Script source Â· Apps Script</div>
-        <div class="doc-loader-row">
-          <input type="text" id="doc-id" placeholder="Apps Script exec URL" title="Your deployed Google Apps Script URL" />
-          <button class="fetch-btn" id="fetch-btn" onclick="loadFromDoc()" title="Fetch script from Google Doc">â†º Fetch</button>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-          <div class="doc-status info" id="doc-status">Loadingâ€¦</div>
-          <div class="file-fallback">
-            <label class="file-fallback-label" for="file-input" title="Load a local .txt file instead">or load local .txt</label>
-            <input type="file" id="file-input" accept=".txt,.md" style="display:none" onchange="loadFromFile(event)"/>
-          </div>
-        </div>
-      </div>
-
-      <!-- Beat selector -->
-      <div class="beat-row" style="padding-top:8px">
-        <select id="beat-select" onchange="onBeatChange()">
-          <option value="__manual__">â€” manual â€”</option>
-        </select>
-      </div>
-      <!-- Separator hint -->
-      <div class="separator-preview">â¬† fixed &nbsp;â”„â”„ separator: "---" â”„â”„&nbsp; dynamic â¬‡</div>
-      <textarea class="prompt-ta" id="dynamic-prompt"
-        placeholder="Current scene beat promptâ€¦"></textarea>
-      <!-- Start Message -->
-      <div class="start-msg-block" id="start-msg-block">
-        <div class="start-msg-header">
-          <span class="s-label" style="flex:1">Start Message</span>
-          <span class="char-count" id="start-msg-count">0</span>
-        </div>
-        <textarea class="prompt-ta start-msg-ta" id="start-message"
-          placeholder="Auto-filled from $$START_MESSAGE[â€¦]$$ in the scriptâ€¦"
-          oninput="document.getElementById('start-msg-count').textContent=this.value.length"></textarea>
-      </div>
-      <!-- Combined prompt preview -->
-      <div class="sys-preview-row" onclick="toggleSysPreview()">
-        <span class="s-label">Combined Preview</span>
-        <span class="sys-preview-chars" id="combined-chars">0 chars</span>
-        <span class="chevron" id="preview-chevron" style="font-size:10px;color:var(--text-muted)">â–¾</span>
-      </div>
-      <div class="sys-preview-box" id="sys-preview-box" style="display:none"></div>
-    </div>
-  </div>
-  <!-- MONKEY PUPPET PANEL -->
-  <div class="char-panel" id="panel-monkey">
-    <div class="puppet-prompt-block">
-      <div class="prompt-header">
-        <span class="s-label">Monkey Puppet Prompt</span>
-        <span class="live-dot" style="background:var(--accent3);box-shadow:0 0 5px #4ade80aa"></span>
-        <span class="char-count" id="monkey-chars">0</span>
-      </div>
-      <textarea class="prompt-ta" id="monkey-prompt"
-        placeholder="Monkey Puppet's identity, voice, rulesâ€¦" style="flex:1"></textarea>
-    </div>
-    <div class="puppet-out-header">
-      <span class="s-label" style="flex:1">Last Reply</span>
-      <button class="clear-btn" onclick="clearPuppetOutput('monkey')" style="padding:3px 9px;font-size:9px">clear</button>
-    </div>
-    <div class="puppet-out-box empty" id="monkey-output">No reply yetâ€¦</div>
-  </div>
-  <!-- HUMAN PUPPET PANEL -->
-  <div class="char-panel" id="panel-human">
-    <div class="puppet-prompt-block">
-      <div class="prompt-header">
-        <span class="s-label">Human Puppet Prompt</span>
-        <span class="live-dot" style="background:var(--accent2);box-shadow:0 0 5px #7b5ea7aa"></span>
-        <span class="char-count" id="human-chars">0</span>
-      </div>
-      <textarea class="prompt-ta" id="human-prompt"
-        placeholder="Human Puppet's identity, voice, rulesâ€¦" style="flex:1"></textarea>
-    </div>
-    <div class="puppet-out-header">
-      <span class="s-label" style="flex:1">Last Reply</span>
-      <button class="clear-btn" onclick="clearPuppetOutput('human')" style="padding:3px 9px;font-size:9px">clear</button>
-    </div>
-    <div class="puppet-out-box empty" id="human-output">No reply yetâ€¦</div>
-  </div>
-</aside>
-<div class="v-resizer" id="v-resizer"></div>
-<!-- â”€â”€ MAIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
-<main>
-  <!-- Keypoints panel â€” shown above chat when beat has %%keypoints%% -->
-  <div class="keypoints-panel" id="keypoints-panel" style="display:none">
-    <div class="keypoints-panel-header">
-      <span class="s-label">Key Points</span>
-      <button class="kp-close" onclick="document.getElementById('keypoints-panel').style.display='none'" title="Hide">âœ•</button>
-    </div>
-    <div class="keypoints-box" id="keypoints-box"></div>
-  </div>
-  <div id="messages">
-    <div class="empty-state" id="empty-state">
-      <div class="big-icon">â¬¡</div>
-      <p>Fetching script from Google Docâ€¦<br>then start the conversation.</p>
-    </div>
-  </div>
-  <div class="input-area">
-    <div class="input-row">
-      <textarea id="user-input" rows="1"
-        placeholder="Type a messageâ€¦ (Enter to send, Shift+Enter for newline)"
-        oninput="autoResize(this)"></textarea>
-      <button class="send-btn"       id="send-btn"        onclick="sendMessage()"        title="Send to Peter">â†‘</button>
-      <button class="send-btn-small monkey" id="send-monkey-btn" onclick="sendToPuppet('monkey')" title="Send to Monkey Puppet" style="display:none">M</button>
-      <button class="send-btn-small human"  id="send-human-btn"  onclick="sendToPuppet('human')"  title="Send to Human Puppet"  style="display:none">H</button>
-    </div>
-    <div class="input-meta">
-      <span class="input-hint" id="input-hint">Enter Â· send to Peter &nbsp;Â·&nbsp; Shift+Enter Â· newline</span>
-      <span class="token-count" id="msg-count">0 messages</span>
-    </div>
-  </div>
-</main>
-<!-- â”€â”€ SCRIPT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
-<script>
-  // â”€â”€â”€ API KEY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  const ANTHROPIC_API_KEY = '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';
-  // â”€â”€â”€ APPS SCRIPT URL (serves the Google Doc as plain text) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBdtP2kx-TnqVNIzh2lqNf_lxrbAHD1Xm5jI4muQlkDb6Isx-x7o_pzPIqdsdq3VgOUg/exec';
-  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
-  let conversation  = [];
-  let beats         = {};
-  let startMessages = {};
-  let keypoints     = {};
-  let activeCharTab = 'peter';
-  let eventLog      = [];
-
-  // â”€â”€ Init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  if (ANTHROPIC_API_KEY) {
-    document.getElementById('api-key').value = ANTHROPIC_API_KEY;
-    document.getElementById('api-key').placeholder = '(embedded)';
-  }
-
-  // Restore script URL from localStorage, fall back to default
-  const savedUrl = localStorage.getItem('pm_v2_script_url') || SCRIPT_URL;
-  document.getElementById('doc-id').value = savedUrl;
+      <!-- â”€â”€ GOOGLE DOC LOADER (primary) ƒŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠR €´´ø(€€€€€€ñ‘¥Ø±…ÍÌô‰‘½Œµ±½…‘•Èˆø(€€€€€€€€ñ‘¥Ø±…ÍÌô‰‘½Œµ±½…‘•Èµ±…‰•°ˆùMÉ¥ÁÐÍ½ÕÉ”ƒ
+ÜÁÁÌMÉ¥ÁÐð½‘¥Øø(€€€€€€€€ñ‘¥Ø±…ÍÌô‰‘½Œµ±½…‘•ÈµÉ½Üˆø(€€€€€€€€€€ñ¥¹ÁÕÐÑåÁ”ô‰Ñ•áÐˆ¥ô‰‘½Œµ¥ˆÁ±…•¡½±‘•Èô‰ÁÁÌMÉ¥ÁÐ•á•ŒUI0ˆÑ¥Ñ±”ô‰e½ÕÈ‘•Á±½å•½½±”ÁÁÌMÉ¥ÁÐUI0ˆ€¼ø(€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰™•Ñ µ‰Ñ¸ˆ¥ô‰™•Ñ µ‰Ñ¸ˆ½¹±¥¬ô‰±½…‘É½µ½Œ ¤ˆÑ¥Ñ±”ô‰•Ñ ÍÉ¥ÁÐ™É½´½½±”½ŒˆûŠè•Ñ ð½‰ÕÑÑ½¸ø(€€€€€€€€ð½‘¥Øø(€€€€€€€€ñ‘¥ØÍÑå±”ô‰‘¥ÍÁ±…äé™±•àí…±¥¸µ¥Ñ•µÌé•¹Ñ•Èí©ÕÍÑ¥™äµ½¹Ñ•¹ÐéÍÁ…”µ‰•ÑÝ••¸í…ÀèáÁàˆø(€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰‘½ŒµÍÑ…ÑÕÌ¥¹™¼ˆ¥ô‰‘½ŒµÍÑ…ÑÕÌˆù1½…‘¥¹ŸŠ˜ð½‘¥Øø(€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰™¥±”µ™…±±‰…¬ˆø(€€€€€€€€€€€€ñ±…‰•°±…ÍÌô‰™¥±”µ™…±±‰…¬µ±…‰•°ˆ™½Èô‰™¥±”µ¥¹ÁÕÐˆÑ¥Ñ±”ô‰1½…„±½…°€¹ÑáÐ™¥±”¥¹ÍÑ•…ˆù½È±½…±½…°€¹ÑáÐð½±…‰•°ø(€€€€€€€€€€€€ñ¥¹ÁÕÐÑåÁ”ô‰™¥±”ˆ¥ô‰™¥±”µ¥¹ÁÕÐˆ…•ÁÐôˆ¹ÑáÐ°¹µˆÍÑå±”ô‰‘¥ÍÁ±…äé¹½¹”ˆ½¹¡…¹”ô‰±½…‘É½µ¥±”¡•Ù•¹Ð¤ˆ¼ø(€€€€€€€€€€ð½‘¥Øø(€€€€€€€€ð½‘¥Øø(€€€€€€ð½‘¥Øø((€€€€€€ð„´´	•…ÐÍ•±•Ñ½È€´´ø(€€€€€€ñ‘¥Ø±…ÍÌô‰‰•…ÐµÉ½ÜˆÍÑå±”ô‰Á…‘‘¥¹œµÑ½ÀèáÁàˆø(€€€€€€€€ñÍ•±•Ð¥ô‰‰•…ÐµÍ•±•Ðˆ½¹¡…¹”ô‰½¹	•…Ñ¡…¹” ¤ˆø(€€€€€€€€€€ñ½ÁÑ¥½¸Ù…±Õ”ô‰}}µ…¹Õ…±}|ˆûŠPµ…¹Õ…°ƒŠPð½½ÁÑ¥½¸ø(€€€€€€€€ð½Í•±•Ðø(€€€€€€ð½‘¥Øø(€€€€€€ð„´´M•Á…É…Ñ½È¡¥¹Ð€´´ø(€€€€€€ñ‘¥Ø±…ÍÌô‰Í•Á…É…Ñ½ÈµÁÉ•Ù¥•ÜˆûŠ²™¥á•€™¹‰ÍÀïŠRŠRÍ•Á…É…Ñ½Èè€ˆ´´´ˆƒŠRŠR™¹‰ÍÀì‘å¹…µ¥ŒƒŠ²ð½‘¥Øø(€€€€€€ñÑ•áÑ…É•„±…ÍÌô‰ÁÉ½µÁÐµÑ„ˆ¥ô‰‘å¹…µ¥ŒµÁÉ½µÁÐˆ(€€€€€€€Á±…•¡½±‘•Èô‰ÕÉÉ•¹ÐÍ•¹”‰•…ÐÁÉ½µÁÓŠ˜ˆøð½Ñ•áÑ…É•„ø(€€€€€€ð„´´MÑ…ÉÐ5•ÍÍ…”€´´ø(€€€€€€ñ‘¥Ø±…ÍÌô‰ÍÑ…ÉÐµµÍœµ‰±½¬ˆ¥ô‰ÍÑ…ÉÐµµÍœµ‰±½¬ˆø(€€€€€€€€ñ‘¥Ø±…ÍÌô‰ÍÑ…ÉÐµµÍœµ¡•…‘•Èˆø(€€€€€€€€€€ñÍÁ…¸±…ÍÌô‰Ìµ±…‰•°ˆÍÑå±”ô‰™±•àèÄˆùMÑ…ÉÐ5•ÍÍ…”ð½ÍÁ…¸ø(€€€€€€€€€€ñÍÁ…¸±…ÍÌô‰¡…Èµ½Õ¹Ðˆ¥ô‰ÍÑ…ÉÐµµÍœµ½Õ¹ÐˆøÀð½ÍÁ…¸ø(€€€€€€€€ð½‘¥Øø(€€€€€€€€ñÑ•áÑ…É•„±…ÍÌô‰ÁÉ½µÁÐµÑ„ÍÑ…ÉÐµµÍœµÑ„ˆ¥ô‰ÍÑ…ÉÐµµ•ÍÍ…”ˆ(€€€€€€€€€Á±…•¡½±‘•Èô‰ÕÑ¼µ™¥±±•™É½´€‘MQIQ}5MMoŠ™t¥¸Ñ¡”ÍÉ¥ÁÓŠ˜ˆ(€€€€€€€€€½¹¥¹ÁÕÐô‰‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ÍÑ…ÉÐµµÍœµ½Õ¹Ðœ¤¹Ñ•áÑ½¹Ñ•¹ÐõÑ¡¥Ì¹Ù…±Õ”¹±•¹Ñ ˆøð½Ñ•áÑ…É•„ø(€€€€€€ð½‘¥Øø(€€€€€€ð„´´½µ‰¥¹•ÁÉ½µÁÐÁÉ•Ù¥•Ü€´´ø(€€€€€€ñ‘¥Ø±…ÍÌô‰ÍåÌµÁÉ•Ù¥•ÜµÉ½Üˆ½¹±¥¬ô‰Ñ½±•MåÍAÉ•Ù¥•Ü ¤ˆø(€€€€€€€€ñÍÁ…¸±…ÍÌô‰Ìµ±…‰•°ˆù½µ‰¥¹•AÉ•Ù¥•Üð½ÍÁ…¸ø(€€€€€€€€ñÍÁ…¸±…ÍÌô‰ÍåÌµÁÉ•Ù¥•Üµ¡…ÉÌˆ¥ô‰½µ‰¥¹•µ¡…ÉÌˆøÀ¡…ÉÌð½ÍÁ…¸ø(€€€€€€€€ñÍÁ…¸±…ÍÌô‰¡•ÙÉ½¸ˆ¥ô‰ÁÉ•Ù¥•Üµ¡•ÙÉ½¸ˆÍÑå±”ô‰™½¹ÐµÍ¥é”èÄÁÁàí½±½ÈéÙ…È ´µÑ•áÐµµÕÑ•¤ˆûŠZøð½ÍÁ…¸ø(€€€€€€ð½‘¥Øø(€€€€€€ñ‘¥Ø±…ÍÌô‰ÍåÌµÁÉ•Ù¥•Üµ‰½àˆ¥ô‰ÍåÌµÁÉ•Ù¥•Üµ‰½àˆÍÑå±”ô‰‘¥ÍÁ±…äé¹½¹”ˆøð½‘¥Øø(€€€€ð½‘¥Øø(€€ð½‘¥Øø(€€ð„´´5=9-dAUAAPA90€´´ø(€€ñ‘¥Ø±…ÍÌô‰¡…ÈµÁ…¹•°ˆ¥ô‰Á…¹•°µµ½¹­•äˆø(€€€€ñ‘¥Ø±…ÍÌô‰ÁÕÁÁ•ÐµÁÉ½µÁÐµ‰±½¬ˆø(€€€€€€ñ‘¥Ø±…ÍÌô‰ÁÉ½µÁÐµ¡•…‘•Èˆø(€€€€€€€€ñÍÁ…¸±…ÍÌô‰Ìµ±…‰•°ˆù5½¹­•äAÕÁÁ•ÐAÉ½µÁÐð½ÍÁ…¸ø(€€€€€€€€ñÍÁ…¸±…ÍÌô‰±¥Ù”µ‘½ÐˆÍÑå±”ô‰‰…­É½Õ¹éÙ…È ´µ…•¹ÐÌ¤í‰½àµÍ¡…‘½ÜèÀ€À€ÕÁà€ŒÑ…‘”àÁ…„ˆøð½ÍÁ…¸ø(€€€€€€€€ñÍÁ…¸±…ÍÌô‰¡…Èµ½Õ¹Ðˆ¥ô‰µ½¹­•äµ¡…ÉÌˆøÀð½ÍÁ…¸ø(€€€€€€ð½‘¥Øø(€€€€€€ñÑ•áÑ…É•„±…ÍÌô‰ÁÉ½µÁÐµÑ„ˆ¥ô‰µ½¹­•äµÁÉ½µÁÐˆ(€€€€€€€Á±…•¡½±‘•Èô‰5½¹­•äAÕÁÁ•ÐÌ¥‘•¹Ñ¥Ñä°Ù½¥”°ÉÕ±•ÏŠ˜ˆÍÑå±”ô‰™±•àèÄˆøð½Ñ•áÑ…É•„ø(€€€€ð½‘¥Øø(€€€€ñ‘¥Ø±…ÍÌô‰ÁÕÁÁ•Ðµ½ÕÐµ¡•…‘•Èˆø(€€€€€€ñÍÁ…¸±…ÍÌô‰Ìµ±…‰•°ˆÍÑå±”ô‰™±•àèÄˆù1…ÍÐI•Á±äð½ÍÁ…¸ø(€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰±•…Èµ‰Ñ¸ˆ½¹±¥¬ô‰±•…ÉAÕÁÁ•Ñ=ÕÑÁÕÐ µ½¹­•äœ¤ˆÍÑå±”ô‰Á…‘‘¥¹œèÍÁà€åÁàí™½¹ÐµÍ¥é”èåÁàˆù±•…Èð½‰ÕÑÑ½¸ø(€€€€ð½‘¥Øø(€€€€ñ‘¥Ø±…ÍÌô‰ÁÕÁÁ•Ðµ½ÕÐµ‰½à•µÁÑäˆ¥ô‰µ½¹­•äµ½ÕÑÁÕÐˆù9¼É•Á±äå•ÓŠ˜ð½‘¥Øø(€€ð½‘¥Øø(€€ð„´´!U58AUAAPA90€´´ø(€€ñ‘¥Ø±…ÍÌô‰¡…ÈµÁ…¹•°ˆ¥ô‰Á…¹•°µ¡Õµ…¸ˆø(€€€€ñ‘¥Ø±…ÍÌô‰ÁÕÁÁ•ÐµÁÉ½µÁÐµ‰±½¬ˆø(€€€€€€ñ‘¥Ø±…ÍÌô‰ÁÉ½µÁÐµ¡•…‘•Èˆø(€€€€€€€€ñÍÁ…¸±…ÍÌô‰Ìµ±…‰•°ˆù!Õµ…¸AÕÁÁ•ÐAÉ½µÁÐð½ÍÁ…¸ø(€€€€€€€€ñÍÁ…¸±…ÍÌô‰±¥Ù”µ‘½ÐˆÍÑå±”ô‰‰…­É½Õ¹éÙ…È ´µ…•¹ÐÈ¤í‰½àµÍ¡…‘½ÜèÀ€À€ÕÁà€ŒÝˆÕ•„Ý…„ˆøð½ÍÁ…¸ø(€€€€€€€€ñÍÁ…¸±…ÍÌô‰¡…Èµ½Õ¹Ðˆ¥ô‰¡Õµ…¸µ¡…ÉÌˆøÀð½ÍÁ…¸ø(€€€€€€ð½‘¥Øø(€€€€€€ñÑ•áÑ…É•„±…ÍÌô‰ÁÉ½µÁÐµÑ„ˆ¥ô‰¡Õµ…¸µÁÉ½µÁÐˆ(€€€€€€€Á±…•¡½±‘•Èô‰!Õµ…¸AÕÁÁ•ÐÌ¥‘•¹Ñ¥Ñä°Ù½¥”°ÉÕ±•ÏŠ˜ˆÍÑå±”ô‰™±•àèÄˆøð½Ñ•áÑ…É•„ø(€€€€ð½‘¥Øø(€€€€ñ‘¥Ø±…ÍÌô‰ÁÕÁÁ•Ðµ½ÕÐµ¡•…‘•Èˆø(€€€€€€ñÍÁ…¸±…ÍÌô‰Ìµ±…‰•°ˆÍÑå±”ô‰™±•àèÄˆù1…ÍÐI•Á±äð½ÍÁ…¸ø(€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰±•…Èµ‰Ñ¸ˆ½¹±¥¬ô‰±•…ÉAÕÁÁ•Ñ=ÕÑÁÕÐ ¡Õµ…¸œ¤ˆÍÑå±”ô‰Á…‘‘¥¹œèÍÁà€åÁàí™½¹ÐµÍ¥é”èåÁàˆù±•…Èð½‰ÕÑÑ½¸ø(€€€€ð½‘¥Øø(€€€€ñ‘¥Ø±…ÍÌô‰ÁÕÁÁ•Ðµ½ÕÐµ‰½à•µÁÑäˆ¥ô‰¡Õµ…¸µ½ÕÑÁÕÐˆù9¼É•Á±äå•ÓŠ˜ð½‘¥Øø(€€ð½‘¥Øø(ð½…Í¥‘”ø(ñ‘¥Ø±…ÍÌô‰ØµÉ•Í¥é•Èˆ¥ô‰ØµÉ•Í¥é•Èˆøð½‘¥Øø(ð„´´ƒŠRŠR 5%8ƒŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠR €´´ø(ñµ…¥¸ø(€€ð„´´-•åÁ½¥¹ÑÌÁ…¹•°ƒŠPÍ¡½Ý¸…‰½Ù”¡…ÐÝ¡•¸‰•…Ð¡…Ì€”•­•åÁ½¥¹ÑÌ””€´´ø(€€ñ‘¥Ø±…ÍÌô‰­•åÁ½¥¹ÑÌµÁ…¹•°ˆ¥ô‰­•åÁ½¥¹ÑÌµÁ…¹•°ˆÍÑå±”ô‰‘¥ÍÁ±…äé¹½¹”ˆø(€€€€ñ‘¥Ø±…ÍÌô‰­•åÁ½¥¹ÑÌµÁ…¹•°µ¡•…‘•Èˆø(€€€€€€ñÍÁ…¸±…ÍÌô‰Ìµ±…‰•°ˆù-•äA½¥¹ÑÌð½ÍÁ…¸ø(€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰­Àµ±½Í”ˆ½¹±¥¬ô‰‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ­•åÁ½¥¹ÑÌµÁ…¹•°œ¤¹ÍÑå±”¹‘¥ÍÁ±…äô¹½¹”œˆÑ¥Ñ±”ô‰!¥‘”ˆûŠrTð½‰ÕÑÑ½¸ø(€€€€ð½‘¥Øø(€€€€ñ‘¥Ø±…ÍÌô‰­•åÁ½¥¹ÑÌµ‰½àˆ¥ô‰­•åÁ½¥¹ÑÌµ‰½àˆøð½‘¥Øø(€€ð½‘¥Øø(€€ñ‘¥Ø¥ô‰µ•ÍÍ…•Ìˆø(€€€€ñ‘¥Ø±…ÍÌô‰•µÁÑäµÍÑ…Ñ”ˆ¥ô‰•µÁÑäµÍÑ…Ñ”ˆø(€€€€€€ñ‘¥Ø±…ÍÌô‰‰¥œµ¥½¸ˆûŠ²„ð½‘¥Øø(€€€€€€ñÀù•Ñ¡¥¹œÍÉ¥ÁÐ™É½´½½±”½Š˜ñ‰ÈùÑ¡•¸ÍÑ…ÉÐÑ¡”½¹Ù•ÉÍ…Ñ¥½¸¸ð½Àø(€€€€ð½‘¥Øø(€€ð½‘¥Øø(€€ñ‘¥Ø±…ÍÌô‰¥¹ÁÕÐµ…É•„ˆø(€€€€ñ‘¥Ø±…ÍÌô‰¥¹ÁÕÐµÉ½Üˆø(€€€€€€ñÑ•áÑ…É•„¥ô‰ÕÍ•Èµ¥¹ÁÕÐˆÉ½ÝÌôˆÄˆ(€€€€€€€Á±…•¡½±‘•Èô‰QåÁ”„µ•ÍÍ…—Š˜€¡¹Ñ•ÈÑ¼Í•¹°M¡¥™Ð­¹Ñ•È™½È¹•Ý±¥¹”¤ˆ(€€€€€€€½¹¥¹ÁÕÐô‰…ÕÑ½I•Í¥é”¡Ñ¡¥Ì¤ˆøð½Ñ•áÑ…É•„ø(€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰Í•¹µ‰Ñ¸ˆ€€€€€€¥ô‰Í•¹µ‰Ñ¸ˆ€€€€€€€½¹±¥¬ô‰Í•¹‘5•ÍÍ…” ¤ˆ€€€€€€€Ñ¥Ñ±”ô‰M•¹Ñ¼A•Ñ•ÈˆûŠDð½‰ÕÑÑ½¸ø(€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰Í•¹µ‰Ñ¸µÍµ…±°µ½¹­•äˆ¥ô‰Í•¹µµ½¹­•äµ‰Ñ¸ˆ½¹±¥¬ô‰Í•¹‘Q½AÕÁÁ•Ð µ½¹­•äœ¤ˆÑ¥Ñ±”ô‰M•¹Ñ¼5½¹­•äAÕÁÁ•ÐˆÍÑå±”ô‰‘¥ÍÁ±…äé¹½¹”ˆù4ð½‰ÕÑÑ½¸ø(€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰Í•¹µ‰Ñ¸µÍµ…±°¡Õµ…¸ˆ€¥ô‰Í•¹µ¡Õµ…¸µ‰Ñ¸ˆ€½¹±¥¬ô‰Í•¹‘Q½AÕÁÁ•Ð ¡Õµ…¸œ¤ˆ€Ñ¥Ñ±”ô‰M•¹Ñ¼!Õµ…¸AÕÁÁ•Ðˆ€ÍÑå±”ô‰‘¥ÍÁ±…äé¹½¹”ˆù ð½‰ÕÑÑ½¸ø(€€€€ð½‘¥Øø(€€€€ñ‘¥Ø±…ÍÌô‰¥¹ÁÕÐµµ•Ñ„ˆø(€€€€€€ñÍÁ…¸±…ÍÌô‰¥¹ÁÕÐµ¡¥¹Ðˆ¥ô‰¥¹ÁÕÐµ¡¥¹Ðˆù¹Ñ•Èƒ
+ÜÍ•¹Ñ¼A•Ñ•È€™¹‰ÍÀï
+Ü™¹‰ÍÀìM¡¥™Ð­¹Ñ•Èƒ
+Ü¹•Ý±¥¹”ð½ÍÁ…¸ø(€€€€€€ñÍÁ…¸±…ÍÌô‰Ñ½­•¸µ½Õ¹Ðˆ¥ô‰µÍœµ½Õ¹ÐˆøÀµ•ÍÍ…•Ìð½ÍÁ…¸ø(€€€€ð½‘¥Øø(€€ð½‘¥Øø(ð½µ…¥¸ø(ð„´´ƒŠRŠR MI%APƒŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠR €´´ø(ñÍÉ¥ÁÐø(€€¼¼ƒŠRŠRŠR A$-dƒŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠR (€½¹ÍÐ9Q!I=A%}A%}-d€ô€œœì€€¼¼±•…Ù”•µÁÑäƒŠP•¹Ñ•Èå½ÕÈ­•ä¥¸Ñ¡”U$ì¥ÐÌÍ…Ù•¥¸±½…±MÑ½É…”(€€¼¼ƒŠRŠRŠR AALMI%APUI0€¡Í•ÉÙ•ÌÑ¡”½½±”½Œ…ÌÁ±…¥¸Ñ•áÐ¤ƒŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠR (€½¹ÍÐMI%AQ}UI0€ô€¡ÑÑÁÌè¼½ÍÉ¥ÁÐ¹½½±”¹½´½µ…É½Ì½Ì½-™å‰Ý	‘Ñ@É­àµQ¹ÅY9%é É±Å9™}±áÉ‰!Åa´Õ©$ÑµÕE±­ˆÙ%ÍàµàÝ½}ÁéA%Å‘Í‘ÄÍY=Uœ½•á•Œœì(€€¼¼ƒŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠR ((€±•Ð½¹Ù•ÉÍ…Ñ¥½¸€€ômtì(€±•Ð‰•…ÑÌ€€€€€€€€€ôíôì(€±•ÐÍÑ…ÉÑ5•ÍÍ…•Ì€ôíôì(€±•Ð­•åÁ½¥¹ÑÌ€€€€€ôíôì(€±•Ð…Ñ¥Ù•¡…ÉQ…ˆ€ô€Á•Ñ•Èœì(€±•Ð•Ù•¹Ñ1½œ€€€€€€ômtì((€€¼¼ƒŠRŠR %¹¥ÐƒŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠRŠR (€€¼¼I•ÍÑ½É”A$­•ä™É½´±½…±MÑ½É…”(€½¹ÍÐÍ…Ù•‘-•ä€ô±½…±MÑ½É…”¹•Ñ%Ñ•´ Áµ}ØÉ}…Á¥}­•äœ¤ñð€œœì(€¥˜€¡Í…Ù•‘-•ä¤ì(€€€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% …Á¤µ­•äœ¤¹Ù…±Õ”€ôÍ…Ù•‘-•äì(€€€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% …Á¤µ­•äœ¤¹Á±…•¡½±‘•È€ô€œ¡Í…Ù•¤œì(€ô(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% …Á¤µ­•äœ¤¹…‘‘Ù•¹Ñ1¥ÍÑ•¹•È ¡…¹”œ°™Õ¹Ñ¥½¸ ¤ì(€€€¥˜€¡Ñ¡¥Ì¹Ù…±Õ”¹ÑÉ¥´ ¤¤±½…±MÑ½É…”¹Í•Ñ%Ñ•´ Áµ}ØÉ}…Á¥}­•äœ°Ñ¡¥Ì¹Ù…±Õ”¹ÑÉ¥´ ¤¤ì(€ô¤ì((€€¼¼I•ÍÑ½É”ÍÉ¥ÁÐUI0™É½´±½…±MÑ½É…”°™…±°‰…¬Ñ¼‘•™…Õ±Ð(€½¹ÍÐÍ…Ù•‘UÉ°€€ô±½…±MÑ½É…”¹•Ñ%Ñ•´ Áµ}ØÉ}ÍÉ¥ÁÑ}ÕÉ°œ¤ñðMI%AQ}UI0ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ‘½Œµ¥œ¤¹Ù…±Õ”€ôÍvedUrl;
 
   // Fixed prompt char count + preview
   document.getElementById('fixed-prompt').addEventListener('input', function() {
