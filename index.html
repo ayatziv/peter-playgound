@@ -888,7 +888,7 @@
   </div>
 </aside>
 <div class="v-resizer" id="v-resizer"></div>
-<!-- ── MAIN ────────────────────────────────────────────────────────────────── -->
+<!-- ── MAIN ─────────────────────────────────────────────────────────────────── -->
 <main>
   <!-- Keypoints panel — shown above chat when beat has %%keypoints%% -->
   <div class="keypoints-panel" id="keypoints-panel" style="display:none">
@@ -922,7 +922,7 @@
 <!-- ── SCRIPT ──────────────────────────────────────────────────────────────── -->
 <script>
   // ─── API KEY ───────────────────────────────────────────────────────────────
-  const ANTHROPIC_API_KEY = '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';
+  const ANTHROPIC_API_KEY = '';  // enter key in UI; saved in localStorage
   // ─── APPS SCRIPT URL (serves the Google Doc as plain text) ────────────────
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBdtP2kx-TnqVNIzh2lqNf_lxrbAHD1Xm5jI4muQlkDb6Isx-x7o_pzPIqdsdq3VgOUg/exec';
   // ──────────────────────────────────────────────────────────────────────────
@@ -935,16 +935,21 @@
   let eventLog      = [];
 
   // ── Init ──────────────────────────────────────────────────────────────────
-  if (ANTHROPIC_API_KEY) {
-    document.getElementById('api-key').value = ANTHROPIC_API_KEY;
-    document.getElementById('api-key').placeholder = '(embedded)';
+  // Restore API key from localStorage
+  const _savedKey = localStorage.getItem('pm_api_key') || '';
+  if (_savedKey) {
+    document.getElementById('api-key').value = _savedKey;
+    document.getElementById('api-key').placeholder = '(saved)';
   }
+  document.getElementById('api-key').addEventListener('change', function() {
+    if (this.value.trim()) localStorage.setItem('pm_api_key', this.value.trim());
+  });
 
   // Restore script URL from localStorage, fall back to default
   const savedUrl = localStorage.getItem('pm_v2_script_url') || SCRIPT_URL;
   document.getElementById('doc-id').value = savedUrl;
 
-  // Fixed prompt char count + preview
+  // Fixed prompt char ct + preview
   document.getElementById('fixed-prompt').addEventListener('input', function() {
     document.getElementById('fixed-chars').textContent = this.value.length;
     updatePreview();
